@@ -38,3 +38,4 @@ db.sqlite
 .env.development
 .env.test
 db.sqlite
+test.sqlite
