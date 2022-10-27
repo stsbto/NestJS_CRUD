@@ -16,14 +16,15 @@ describe('AppController (e2e)', () => {
   });
 
   it('handler request signup user', () => {
-    const email = 'asdf@asdf.com';
+    const user = { email: 'asdfasdaf@asdf.com', password: 'asdfasdf1234' };
     return request(app.getHttpServer())
-      .get('/auth/sighup')
-      .send({ email, password: 'asdfasdf' })
+      .post('/auth/signup')
+      .send(user)
       .expect(201)
       .then((res) => {
-        expect(res.body.id).toBeDefined();
-        expect(res.body.email).toEqual(email);
+        const { id, email } = res.body;
+        expect(id).toBeDefined();
+        expect(email).toEqual(user.email);
       });
   });
 });
