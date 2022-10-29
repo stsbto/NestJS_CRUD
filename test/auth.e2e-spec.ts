@@ -15,16 +15,17 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('handler request signup user', () => {
+  it('handler request signup user', async () => {
     const user = { email: 'asdfasdaf@asdf.com', password: 'asdfasdf1234' };
-    return request(app.getHttpServer())
+    const res = await request(app.getHttpServer())
       .post('/auth/signup')
       .send(user)
-      .expect(201)
-      .then((res) => {
-        const { id, email } = res.body;
-        expect(id).toBeDefined();
-        expect(email).toEqual(user.email);
-      });
+      .expect(201);
+    const cookie = res.get('Set-Cookie');
+    const { body } = await request(app.getHttpServer())
+      .get('/auth/whoami')
+      .set('Cookie', cookie)
+      .expect(200);
+    expect(body.email).toEqual(user.email);
   });
 });
